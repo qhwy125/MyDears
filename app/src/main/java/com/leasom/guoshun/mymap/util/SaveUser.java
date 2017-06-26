@@ -20,6 +20,7 @@ public class SaveUser {
     private String meicon = "meIcon";
     private String youicon = "youIcon";
     private String citycode = "cityCode";
+    private String time = "time";
 
     public void saveMeId(String id) {
         SharePrefUtil.saveString(App.getContext(),me,id);
@@ -35,6 +36,9 @@ public class SaveUser {
     }
     public void saveCityCode(String id) {
         SharePrefUtil.saveString(App.getContext(),citycode,id);
+    }
+    public void saveTime(String id) {
+        SharePrefUtil.saveString(App.getContext(),time,id);
     }
     public String getMeId(){
         String beanStr = SharePrefUtil.getString(App.getContext(),me,"");
@@ -68,6 +72,13 @@ public class SaveUser {
         String beanStr = SharePrefUtil.getString(App.getContext(),citycode,"");
         if(beanStr.equals("")){
             return "";
+        }
+        return beanStr;
+    }
+    public String getTime(){
+        String beanStr = SharePrefUtil.getString(App.getContext(),time,"");
+        if(beanStr.equals("")){
+            return "10";
         }
         return beanStr;
     }

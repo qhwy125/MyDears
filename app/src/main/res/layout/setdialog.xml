@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="@dimen/x250"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingRight="30dp"
+    android:paddingLeft="30dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请输入手机号:"
+        android:textSize="16dp"/>
+    <EditText
+        android:id="@+id/me_et"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="我"
+        android:gravity="start"
+        android:textSize="18sp"
+        android:maxLength="11"
+        android:inputType="phone"
+        android:background="@drawable/et"/>
+    <EditText
+        android:id="@+id/you_et"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ta"
+        android:textSize="18sp"
+        android:maxLength="11"
+        android:inputType="phone"
+        android:background="@drawable/et"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请输入定位间隔(分):"
+        android:textSize="16dp"/>
+    <EditText
+        android:id="@+id/time_et"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="5"
+        android:gravity="start"
+        android:textSize="18sp"
+        android:maxLength="11"
+        android:inputType="number"
+        android:background="@drawable/et"/>
+    <TextView
+        android:id="@+id/btn"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="      确  定      "
+        android:textSize="18sp"
+        android:padding="6dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/btn"/>
+</LinearLayout>
+
+</LinearLayout>

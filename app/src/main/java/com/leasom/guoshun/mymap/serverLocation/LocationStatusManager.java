@@ -101,7 +101,7 @@ public class LocationStatusManager {
     /**
      * 过期时间为10分钟
      */
-    private static final long MINIMAL_EXPIRE_TIME = 30 * 60 * 1000;
+    private static final long MINIMAL_EXPIRE_TIME = 10 * 60 * 1000;
 
     private static final String PREFER_NAME = LocationStatusManager.class.getSimpleName();
 

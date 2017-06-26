@@ -1,12 +1,15 @@
 package com.leasom.guoshun.mymap.serverLocation;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.leasom.guoshun.mymap.MainActivity;
+
+import static com.leasom.guoshun.mymap.App.time;
 
 /**
  * 包名： com.amap.locationservicedemo
@@ -27,23 +30,17 @@ import com.leasom.guoshun.mymap.MainActivity;
  * </p>
  */
 public class LocationService extends NotiService {
-
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
-
     private int locationCount;
-
     /**
      * 处理息屏关掉wifi的delegate类
      */
     private IWifiAutoCloseDelegate mWifiAutoCloseDelegate = new WifiAutoCloseDelegate();
-
     /**
      * 记录是否需要对息屏关掉wifi的情况进行处理
      */
     private boolean mIsWifiCloseable = false;
-
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
@@ -80,7 +77,8 @@ public class LocationService extends NotiService {
         mLocationOption.setOnceLocation(false);
         mLocationOption.setLocationCacheEnable(false);
         // 每10秒定位一次
-        mLocationOption.setInterval(5* 1000);
+        int i=Integer.parseInt(time);
+        mLocationOption.setInterval(i* 1000);
         // 地址信息
         mLocationOption.setNeedAddress(true);
         mLocationClient.setLocationOption(mLocationOption);

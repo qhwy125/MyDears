@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,11 +56,15 @@ import com.leasom.guoshun.mymap.serverLocation.Utils;
 import com.leasom.guoshun.mymap.util.SaveUser;
 import com.leasom.guoshun.mymap.util.SelectPhoto;
 import com.yuyh.library.imgsel.ImgSelActivity;
+
+import java.util.List;
+
 import cn.modificator.waterwave_progress.WaterWaveProgress;
 
 import static com.leasom.guoshun.mymap.App.citycode;
 import static com.leasom.guoshun.mymap.App.me;
 import static com.leasom.guoshun.mymap.App.meicon;
+import static com.leasom.guoshun.mymap.App.time;
 import static com.leasom.guoshun.mymap.App.you;
 import static com.leasom.guoshun.mymap.App.youicon;
 
@@ -72,8 +77,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String RECEIVER_ACTION = "location_in_background";
     ImageView me_iv,you_iv,user_iv;
 
+    TextView jl_tv;
     double x=34.745876;
     double y=113.735078;
+    List<Data> listd;
+    ImageView dw_iv,ld_iv,set_iv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,30 +106,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Glide.with(this).load(youicon).into(you_iv);
         }
         //初次设置用户信息
+
         if (me.equals("")&&you.equals("")){
             showDialog();
         }
+
+
     }
 
     private void initView() {
         me_iv=(ImageView)findViewById(R.id.me_iv);
         you_iv=(ImageView)findViewById(R.id.you_iv);
+        dw_iv=(ImageView)findViewById(R.id.dw_iv);
+        ld_iv=(ImageView)findViewById(R.id.ld_iv);
+        set_iv=(ImageView)findViewById(R.id.set_iv);
         me_iv.setOnClickListener(this);
         you_iv.setOnClickListener(this);
+        dw_iv.setOnClickListener(this);
+        ld_iv.setOnClickListener(this);
+        set_iv.setOnClickListener(this);
         if (aMap == null) {
             aMap = mapView.getMap();
         }
         aMap.getUiSettings().setMyLocationButtonEnabled(false);// 设置默认定位按钮是否显示
         aMap.getUiSettings().setZoomControlsEnabled(false);
+        jl_tv=(TextView)findViewById(R.id.jl_tv);
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.me_iv:
+                //更改我的头像
                 new SelectPhoto(this,ME_CODE);
                 break;
             case R.id.you_iv:
+                //更改你的头像
                 new SelectPhoto(this,YOU_CODE);
+                break;
+            case R.id.ld_iv:
+               //雷达查找身边的人
+                startSerach();
+                break;
+            case R.id.dw_iv:
+                //定位自己（开启服务）
+                startService();
+                break;
+            case R.id.set_iv:
+                //设置
+                showDialog();
                 break;
 
         }
@@ -194,10 +226,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void addMarkerMe(LatLng point) {
         if(mylocation==null){
             mylocation = point;
-            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));//设置中心位置
+            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 16));//设置中心位置
         }else  if (mylocation!=null&&mylocation.latitude!=point.latitude){  //如果位置改变了重新设置中心位置
             mylocation = point;
-            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 17));
+            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mylocation, 16));
         }
         if (bMapme==null){
             bMapme= getViewBitmapMe();
@@ -238,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 开始定位服务
      */
     private void startLocationService(){
+        Log.e("==>","time0="+time);
         getApplicationContext().startService(new Intent(this, LocationService.class));
     }
     /**
@@ -264,15 +297,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                  intent.getStringExtra("address")+"\n"+
                                  intent.getStringExtra("street")
                 );*/
-                if (latLonPoint==null){
-                    latLonPoint=new LatLonPoint(latiude,longitude);
-                }else {
-                    latLonPoint.setLongitude(longitude);
-                    latLonPoint.setLatitude(latiude);
-                }
-
-               /* latLonPoint=new LatLonPoint(x,y);
-                addMarkerMe(new LatLng(x,y));*/
+                latLonPoint=new LatLonPoint(latiude,longitude);
+                /*if (!me.equals("")){
+                    listd=Data.getlist();
+                    x=listd.get(Integer.parseInt(me)).x;
+                    y=listd.get(Integer.parseInt(me)).y;
+                    latLonPoint=new LatLonPoint(x,y);
+                    addMarkerMe(new LatLng(x,y));
+                }*/
                 addMarkerMe(new LatLng(latiude,longitude));
                 if (!scitycode.equals("")&&!me.equals("")&&citycode.equals("")&&isload){
                     isload=false;
@@ -283,8 +315,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
-
-
 
     //上传位置
     UploadInfo loadInfo;
@@ -329,11 +359,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NearbySearch.getInstance(getApplicationContext())
                 .searchNearbyInfoAsyn(query);
     }
-    //通过坐标查询位置信息
-    public void serachMeData(){
-
-    }
-
     //周边检索的回调函数
     @Override
     public void onNearbyInfoSearched(NearbySearchResult nearbySearchResult,int resultCode) {
@@ -363,15 +388,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         addMarker(youlatlng);
                         serachYouData(new LatLonPoint(Double.valueOf(str[0]),Double.valueOf(str[1])));
                         float distance = AMapUtils.calculateLineDistance(youlatlng,melatlng);
-                        Log.e("距离==>",distance+"");
+                        //Log.e("距离==>",distance+"");
+                        jl_tv.setText((int) distance+"米");
+                        if ((int) distance<=10){
+                            Toast.makeText(this,"ta就在你身边",Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(this,"ta在这里",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             } else {
-                Log.e("","周边搜索结果为空");
+                Toast.makeText(this,"ta未上传位置",Toast.LENGTH_SHORT).show();
+               // Log.e("","周边搜索结果为空");
             }
         }
         else{
-            Log.e("","周边搜索出现异常，异常码为："+resultCode);
+            Toast.makeText(this,"你俩有异常",Toast.LENGTH_SHORT).show();
+            //Log.e("","周边搜索出现异常，异常码为："+resultCode);
         }
     }
     //上传位置的回调函数
@@ -411,31 +444,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     //用户信息设置
-    EditText me_et,you_et;
+    EditText me_et,you_et,time_et;
     private void showDialog() {
         View view=getLayoutInflater().inflate(R.layout.dialog,null);
         final AlertDialog builder = new AlertDialog.Builder(this)
                 .setView(view)
+                .setCancelable(false)
                 .show();
+
         me_et=(EditText)view.findViewById(R.id.me_et);
         you_et=(EditText)view.findViewById(R.id.you_et);
-
+        time_et=(EditText)view.findViewById(R.id.time_et);
+        if (!new SaveUser().getMeId().equals("")){
+            me_et.setText(new SaveUser().getMeId());
+        }
+        if (!new SaveUser().getYouId().equals("")){
+            you_et.setText(new SaveUser().getYouId());
+        }
+        if (!new SaveUser().getTime().equals("")){
+            time_et.setText(new SaveUser().getTime());
+        }
         view.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (you_et.getText().toString().equals("")||me_et.getText().toString().equals("")){
-                    Toast.makeText(MainActivity.this,"请完善信息！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"请输入手机号！",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (you_et.getText().toString().length()!=11||me_et.getText().toString().length()!=11){
+                    Toast.makeText(MainActivity.this,"请输入正确手机号！",Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 new SaveUser().saveMeId(me_et.getText().toString());
                 new SaveUser().saveYouId(you_et.getText().toString());
+                new SaveUser().saveTime(time_et.getText().toString());
                 me=me_et.getText().toString();
                 you=you_et.getText().toString();
+                time=time_et.getText().toString();
                 startService();
                 builder.dismiss();
             }
         });
-
     }
+
 
     /**
      * 方法必须重写
@@ -476,7 +527,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     //下载进度
     @Override
     public void onDownload(int i, int i1, String s) {
@@ -494,7 +544,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onRemove(boolean b, String s, String s1) {
     }
-
 
     //下载地图
     WaterWaveProgress waveProgress;
@@ -542,8 +591,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
-
     GeocodeSearch geocoderSearch;
     RegeocodeQuery queryy;
     public void serachYouData(LatLonPoint latlonpoint){
@@ -555,11 +602,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //查询位置信息
     @Override
     public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-        /*Log.e("你在==>",regeocodeResult.getRegeocodeAddress().getCity()+"\n"+
+       /* Log.e("你在==>",regeocodeResult.getRegeocodeAddress().getCity()+"\n"+
                 regeocodeResult.getRegeocodeAddress().getDistrict()+"\n"+
                 regeocodeResult.getRegeocodeAddress().getTownship()+"\n"+
                 regeocodeResult.getRegeocodeAddress().getFormatAddress()
-            );*/
+            );
+*/
     }
     @Override
     public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
