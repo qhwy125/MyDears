@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/me_ll"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="#00000000">
+    <ImageView
+        android:layout_width="@dimen/x43"
+        android:layout_height="@dimen/x55"
+        android:src="@mipmap/cyan" />
+    <com.leasom.guoshun.mymap.util.CircleImageView
+        android:id="@+id/icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/x10"
+        android:scaleType="centerCrop"
+        android:layout_width="@dimen/x27"
+        android:layout_height="@dimen/x27"/>
+</RelativeLayout>
