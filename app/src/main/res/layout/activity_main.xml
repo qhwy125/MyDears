@@ -10,72 +10,32 @@
     <com.amap.api.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll" />
-    <ImageView
-        android:id="@+id/set_iv"
-        android:layout_width="@dimen/x40"
-        android:layout_height="@dimen/x40"
-        android:src="@mipmap/set"
-        android:padding="@dimen/x5"
-        android:background="@drawable/img"
-        android:layout_above="@+id/ld_iv"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginBottom="@dimen/x10"/>
-    <ImageView
-        android:id="@+id/ld_iv"
-        android:layout_width="@dimen/x40"
-        android:layout_height="@dimen/x40"
-        android:src="@mipmap/ld"
-        android:padding="@dimen/x5"
-        android:background="@drawable/img"
-        android:layout_above="@+id/dw_iv"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/x10"
-        android:layout_marginBottom="@dimen/x10"/>
-    <ImageView
-        android:id="@+id/dw_iv"
-        android:layout_width="@dimen/x40"
-        android:layout_height="@dimen/x40"
-        android:padding="@dimen/x5"
-        android:src="@mipmap/dw"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/img"
-        android:layout_above="@+id/ll"
-        android:layout_marginBottom="@dimen/x10"
-        android:layout_marginRight="@dimen/x10"/>
+        android:layout_height="match_parent"/>
     <LinearLayout
-        android:id="@+id/ll"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBottom"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
+        android:padding="20dp"
         android:layout_alignParentBottom="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ta"
-            android:textColor="#fff"
-            android:layout_gravity="bottom"/>
-
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginBottom="20dp"
             android:id="@+id/you_iv"
             android:layout_width="@dimen/x60"
             android:layout_height="@dimen/x60"
             android:scaleType="centerCrop"
-            android:src="@mipmap/you"/>
+            android:src="#ffffff"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="@dimen/x15"
+                android:text="你的位置"/>
             <RelativeLayout
                 android:layout_margin="@dimen/x8"
                 android:layout_width="wrap_content"
@@ -87,27 +47,27 @@
                     android:layout_height="@dimen/x30"
                     />
                 <TextView
-                    android:id="@+id/jl_tv"
                     android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
-                    android:textSize="@dimen/x25"
+                    android:textSize="@dimen/x30"
                     android:text="相隔距离"/>
             </RelativeLayout>
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="@dimen/x15"
+                android:layout_gravity="right"
+                android:text="我的位置"/>
         </LinearLayout>
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginBottom="20dp"
             android:id="@+id/me_iv"
             android:layout_width="@dimen/x60"
             android:layout_height="@dimen/x60"
             android:scaleType="centerCrop"
-            android:src="@mipmap/me"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我"
-            android:textColor="#fff"
-            android:layout_gravity="bottom"/>
+            android:src="#ffffff"/>
     </LinearLayout>
 </RelativeLayout>

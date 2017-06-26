@@ -14,7 +14,6 @@ public class App  extends Application{
     public static String youicon="";
     public static String meicon="";
     public static String citycode="";
-    public static String time="";
     private static Context mContext;
     @Override
     public void onCreate() {
@@ -25,7 +24,6 @@ public class App  extends Application{
         meicon=new SaveUser().getMeIcon();
         youicon=new SaveUser().getYouIcon();
         citycode=new SaveUser().getCityCode();
-        time=new SaveUser().getTime();
     }
     public static Context getContext(){
         return mContext;

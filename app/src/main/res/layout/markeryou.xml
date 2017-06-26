@@ -6,16 +6,14 @@
     android:gravity="center"
     android:background="#00000000">
     <ImageView
-        android:layout_width="@dimen/x38"
-        android:layout_height="@dimen/x56"
-        android:src="@mipmap/youp" />
+        android:layout_width="@dimen/x43"
+        android:layout_height="@dimen/x55"
+        android:src="@mipmap/azure" />
     <com.leasom.guoshun.mymap.util.CircleImageView
         android:id="@+id/icon"
-        android:layout_marginTop="@dimen/x3"
-        android:layout_marginLeft="@dimen/x6"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/x10"
         android:scaleType="centerCrop"
-        android:layout_width="@dimen/x33"
-        android:layout_height="@dimen/x33"
-        />
+        android:layout_width="@dimen/x27"
+        android:layout_height="@dimen/x27"/>
 </RelativeLayout>
